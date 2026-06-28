@@ -1,0 +1,9 @@
+language: "en"
+intents:
+  PrintLabel:
+    data:
+      - sentences:
+          - "print a label (that says|saying|with the text) {text}"
+          - "print {text} on a label"
+          - "make a label (that says|saying|with the text) {text}"
+          - "label {text}"

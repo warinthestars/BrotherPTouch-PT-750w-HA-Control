@@ -1,0 +1,29 @@
+name: Label Printer
+version: "1.0.0"
+slug: label_printer
+description: >
+  Print labels on a Brother PT-P750W via a simple HTTP API.
+  Works with HA Assist voice commands, rest_command, and dashboard buttons.
+url: https://github.com/ka2n/ptouchgo
+arch:
+  - aarch64
+  - amd64
+  - armhf
+  - armv7
+  - i386
+ports:
+  8765/tcp: 8765
+ports_description:
+  8765/tcp: Label print HTTP API
+# options provides defaults shown in the HA UI.
+# printer_ip has a default here for testing; change before publishing.
+options:
+  printer_ip: "192.168.1.75"
+  printer_port: 9100
+  tape_width_mm: 24
+  font_size: 40
+schema:
+  printer_ip: str
+  printer_port: int
+  tape_width_mm: int
+  font_size: int

@@ -1,0 +1,11 @@
+{
+  "domain": "label_printer",
+  "name": "Label Printer",
+  "version": "1.0.0",
+  "documentation": "https://github.com/ka2n/ptouchgo",
+  "requirements": [],
+  "dependencies": [],
+  "codeowners": [],
+  "iot_class": "local_polling",
+  "config_flow": true
+}

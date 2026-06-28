@@ -1,0 +1,17 @@
+configuration:
+  printer_ip:
+    name: Printer IP Address
+    description: Static IP of your Brother PT-P750W (e.g. 192.168.1.75).
+  printer_port:
+    name: Printer TCP Port
+    description: Raw printing port — 9100 is the Brother standard. Don't change unless you know why.
+  tape_width_mm:
+    name: Tape Width (mm)
+    description: "Width of the tape currently loaded. Valid values: 6, 9, 12, 18, 24."
+  font_size:
+    name: Font Size (pt)
+    description: >
+      Label text font size in points. Rendered at 180 dpi.
+      For 24 mm tape (128 printable dots), 40 pt is a good starting point.
+      The em-square at 40 pt / 180 dpi is 100 px — fits within 128 px with room for descenders.
+      Go higher for larger text; reduce if characters are clipped at the top or bottom.
