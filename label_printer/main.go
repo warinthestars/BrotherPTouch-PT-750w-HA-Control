@@ -22,7 +22,7 @@ import (
 	"golang.org/x/image/math/fixed"
 )
 
-const version = "1.1.1"
+const version = "1.1.2"
 
 // ---------------------------------------------------------------------------
 // Config (from environment, set by run.sh from add-on options)
@@ -63,8 +63,8 @@ func getBoolEnv(key string, fallback bool) bool {
 }
 
 var (
-	// e.g. "tcp://192.168.1.75:9100"
-	printerAddr   = getEnv("PRINTER_ADDR", "tcp://192.168.1.75:9100")
+	// e.g. "tcp://192.168.1.100:9100"
+	printerAddr   = getEnv("PRINTER_ADDR", "tcp://192.168.1.100:9100")
 	tapeWidthMM   = getIntEnv("TAPE_WIDTH_MM", 24)
 	fontSize      = getFloat64Env("FONT_SIZE", 40.0) // maximum font size (auto-fit shrinks below this)
 	listenAddr    = getEnv("LISTEN_ADDR", ":8080")

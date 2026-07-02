@@ -1,17 +1,33 @@
 configuration:
   printer_ip:
     name: Printer IP Address
-    description: Static IP of your Brother PT-P750W (e.g. 192.168.1.75).
+    description: Static IP of your Brother PT-P750W (e.g. 192.168.1.100). Set a DHCP reservation so it doesn't change.
   printer_port:
     name: Printer TCP Port
     description: Raw printing port — 9100 is the Brother standard. Don't change unless you know why.
   tape_width_mm:
-    name: Tape Width (mm)
-    description: "Width of the tape currently loaded. Valid values: 6, 9, 12, 18, 24."
+    name: Fallback Tape Width (mm)
+    description: "Used when auto-detection is off or fails. Valid values: 6, 9, 12, 18, 24."
+  auto_tape_width:
+    name: Auto-Detect Tape Width
+    description: Ask the printer what tape is loaded before each print. Recommended — prevents size-mismatch errors when swapping cassettes.
   font_size:
-    name: Font Size (pt)
+    name: Max Font Size (pt)
     description: >
-      Label text font size in points. Rendered at 180 dpi.
-      For 24 mm tape (128 printable dots), 40 pt is a good starting point.
-      The em-square at 40 pt / 180 dpi is 100 px — fits within 128 px with room for descenders.
-      Go higher for larger text; reduce if characters are clipped at the top or bottom.
+      Maximum text size in points at 180 dpi — text automatically shrinks to
+      fit the tape, so this only caps how large short labels get. 40 is a
+      good default for 24 mm tape.
+  date_format:
+    name: Date Format
+    description: >
+      Go time layout for date lines (https://pkg.go.dev/time#pkg-constants).
+      "Jan 2, 2006" → Jul 1, 2026 · "2006-01-02" → 2026-07-01 · "01/02/06" → 07/01/26.
+  time_format:
+    name: Time Format
+    description: Go time layout for time lines. "3:04 PM" → 6:42 PM · "15:04" → 18:42.
+  log_level:
+    name: Log Level
+    description: >
+      info = startup, print jobs, errors. debug = additionally logs every HTTP
+      request with source address, printer dial timing/results, and raw
+      ptouchgo protocol tracing.

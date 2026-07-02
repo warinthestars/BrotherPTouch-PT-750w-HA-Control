@@ -1,13 +1,14 @@
 {
   "domain": "label_printer",
   "name": "Label Printer",
-  "version": "1.1.1",
-  "documentation": "https://github.com/ka2n/ptouchgo",
+  "version": "1.1.2",
+  "documentation": "https://github.com/warinthestars/BrotherPTouch-PT-750w-HA-Control",
   "requirements": [],
   "dependencies": [
     "conversation"
   ],
   "codeowners": [],
   "iot_class": "local_polling",
-  "config_flow": true
+  "config_flow": true,
+  "issue_tracker": "https://github.com/warinthestars/BrotherPTouch-PT-750w-HA-Control/issues"
 }
