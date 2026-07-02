@@ -1,5 +1,5 @@
 name: Label Printer
-version: "1.0.0"
+version: "1.1.1"
 slug: label_printer
 description: >
   Print labels on a Brother PT-P750W via a simple HTTP API.
@@ -22,8 +22,22 @@ options:
   printer_port: 9100
   tape_width_mm: 24
   font_size: 40
+  date_format: "Jan 2, 2006"
+  time_format: "3:04 PM"
+  auto_tape_width: true
+  log_level: "info"
 schema:
   printer_ip: str
   printer_port: int
   tape_width_mm: int
   font_size: int
+  # Go time layouts (https://pkg.go.dev/time#pkg-constants), e.g.
+  # "Jan 2, 2006" → Jul 1, 2026 · "2006-01-02" → 2026-07-01 · "01/02/06" → 07/01/26
+  date_format: str
+  time_format: str
+  # When true, the tape width loaded in the printer is detected before each
+  # print and overrides tape_width_mm (prevents size-mismatch errors).
+  auto_tape_width: bool
+  # info = startup, prints, errors. debug = + every HTTP request, printer
+  # dial/status detail, and raw ptouchgo protocol tracing.
+  log_level: list(info|debug)

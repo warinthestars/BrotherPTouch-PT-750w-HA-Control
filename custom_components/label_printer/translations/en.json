@@ -16,5 +16,47 @@
     "abort": {
       "already_configured": "This label printer is already configured."
     }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Label Printer options",
+        "data": {
+          "scan_interval": "Status poll interval (seconds)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "tape_width": { "name": "Tape width" },
+      "tape_color": { "name": "Tape color" },
+      "font_color": { "name": "Text color" },
+      "media_type": { "name": "Media type" },
+      "battery": { "name": "Battery" },
+      "model": { "name": "Model" },
+      "error": { "name": "Error" },
+      "phase": { "name": "Phase" },
+      "status_type": { "name": "Status" }
+    },
+    "binary_sensor": {
+      "online": { "name": "Online" },
+      "problem": { "name": "Problem" }
+    },
+    "number": {
+      "font_size": { "name": "Font size (0 = auto)" },
+      "feed_amount": { "name": "Feed amount" }
+    },
+    "switch": {
+      "autocut": { "name": "Auto cut" },
+      "mirror": { "name": "Mirror" },
+      "half_cut": { "name": "Half cut" },
+      "chain_print": { "name": "Chain printing" },
+      "high_dpi": { "name": "High DPI" }
+    },
+    "button": {
+      "feed": { "name": "Feed and cut" },
+      "test_print": { "name": "Test print" }
+    }
   }
 }

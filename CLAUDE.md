@@ -1,5 +1,18 @@
 PROJECT: Voice-triggered label printing — Brother PT-P750W + Home Assistant + Google Home
 
+STATE UPDATE (2026-07-01): Much of what follows is now historical. The repo
+contains a working v1.1.0 implementation: label_printer/ (Go HTTP add-on:
+/print with date/time/expiry/copies/per-job options, /status, /feed, /test,
+/config, mutex-serialized printer access, two-line auto-fit rendering,
+auto tape-width detection) and custom_components/label_printer/ (config flow,
+notify/sensor/binary_sensor/number/switch/button platforms, /status polling
+coordinator, PrintLabel intent with date/expiry/copies slots, and automatic
+installation of its sentence file into config/custom_sentences/en/ — HA does
+NOT load sentences bundled inside integrations). See PLAN.md and README.md.
+Sentence patterns validated offline with hassil (HA best-match semantics).
+NOT yet deployed to the user's HAOS box — deployment requires the user's
+explicit confirmation, which still stands. Original context below.
+
 GOAL
 Let me say "Hey Google, talk to Home Assistant, print a label that says X" (or speak
 into the HA mobile app mic) and have it print on my Brother PT-P750W label printer.
@@ -62,10 +75,11 @@ CONFIRMED FACTS (do not re-derive — verified in a prior session)
 
 SECURITY NOTE FROM PRIOR SESSION
 At one point the prior assistant called ha_get_addon on the SSH add-on and its
-plaintext SSH password ("Green2012") was echoed back in that tool result, fully
-visible in the prior chat transcript. Flag to the user that they may want to
-rotate that SSH password since it was exposed in a transcript, if they haven't
-already.
+plaintext SSH password (now redacted from this file) was echoed back in that
+tool result, fully visible in the prior chat transcript. The user should rotate
+that SSH password. NOTE: the password previously sat in plaintext in this file,
+so it remains in git history until history is rewritten or the repo is
+recreated fresh — do that before publishing this repo publicly.
 
 WHAT'S EXPLICITLY NOT DONE YET
 No files have been written. No add-on has been created or installed. No HA YAML
