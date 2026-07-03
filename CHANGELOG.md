@@ -7,6 +7,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The add-on (`label_printer/`) and the integration (`custom_components/label_printer/`)
 are versioned together; component-specific notes are labeled **Add-on** or **Integration**.
 
+## [1.2.0] - 2026-07-03
+
+### Added
+- **Integration:** reconfigure flow — change the add-on host/port from the
+  integration's ⋮ menu without deleting and re-adding the entry.
+
+### Changed
+- **Integration:** the default host is now `localhost`, which reaches the
+  port the add-on publishes on the host and therefore works identically for
+  local installs and add-on-repository installs. Add-on internal hostnames
+  depend on the install source (local copies are `local-label-printer`;
+  repository installs get a Supervisor-generated `<repo-hash>-label-printer`
+  name that changes if the add-on is reinstalled from elsewhere) — relying on
+  them broke existing setups when the add-on was reinstalled from a
+  repository.
+- **Integration:** `localhost` is stored as `127.0.0.1` internally so an
+  IPv6-first `localhost` resolution (`::1`) can't break the connection.
+
+### Fixed
+- Documentation: install instructions now lead with the add-on-repository
+  method and no longer tie the integration's host setting to the add-on's
+  install-dependent internal hostname.
+
 ## [1.1.2] - 2026-07-02
 
 ### Changed
@@ -97,6 +120,7 @@ are versioned together; component-specific notes are labeled **Add-on** or **Int
   integration with a config flow, a `notify.label_printer` entity, and a
   `PrintLabel` Assist intent.
 
+[1.2.0]: https://github.com/warinthestars/BrotherPTouch-PT-750w-HA-Control/releases/tag/v1.2.0
 [1.1.2]: https://github.com/warinthestars/BrotherPTouch-PT-750w-HA-Control/releases/tag/v1.1.2
 [1.1.1]: https://github.com/warinthestars/BrotherPTouch-PT-750w-HA-Control/releases/tag/v1.1.1
 [1.1.0]: https://github.com/warinthestars/BrotherPTouch-PT-750w-HA-Control/releases/tag/v1.1.0

@@ -58,19 +58,14 @@ The add-on renders text to a bitmap, converts it to the Brother raster format, a
 
 ### Part 1 — The add-on (print engine)
 
-**1. Copy the `label_printer/` folder to your HA box.**
+**1. Get the add-on into your store — two options:**
 
-Via Samba: connect to `\\<ha-ip>\addons` (Windows) or `smb://<ha-ip>/addons` (macOS) and copy the folder into the share root.
+*Option A — add this repository (recommended):* Settings → Add-ons → Add-on Store → **⋮** → **Repositories** → add this repo's GitHub URL. **Label Printer** appears in the store under the new repository.
 
-Via SSH:
-```bash
-scp -r label_printer/ root@<ha-ip>:/addons/local/label_printer/
-```
-
-Via Studio Code Server: create `/addons/local/label_printer/` and upload the folder's contents.
+*Option B — copy the folder manually:* place `label_printer/` at `/addons/local/label_printer/` via the Samba `addons` share, SSH (`scp -r label_printer/ root@<ha-ip>:/addons/local/label_printer/`), or Studio Code Server. Then Add-on Store → **⋮** → **Check for updates**; it appears under *Local add-ons*.
 
 **2. Install it.**
-Settings → Add-ons → Add-on Store → **⋮** → **Check for updates**, then find **Label Printer** under *Local add-ons* and click **Install**. The first build compiles the Go binary and takes 2–3 minutes.
+Click **Label Printer** → **Install**. The first build compiles the Go binary and takes 2–3 minutes.
 
 **3. Configure it** (Configuration tab):
 
@@ -104,7 +99,7 @@ If `online` is `false`, the add-on is fine but can't reach the printer — check
 
 **3. Add it:** Settings → Devices & Services → **Add Integration** → search **Label Printer**.
 
-**4. Connection settings:** keep the defaults — host `local-label-printer` (the add-on's internal hostname; more reliable from inside HA than `localhost` or a LAN IP), port `8765`. Only change the host if you run the print server somewhere other than the local add-on.
+**4. Connection settings:** keep the defaults — host `localhost`, port `8765`. The add-on publishes its port on the host, so `localhost` works no matter how the add-on was installed, and keeps working if you reinstall it from a different source. (The add-on's internal hostname — shown on its info page, e.g. `local-label-printer` or `<repo-hash>-label-printer` for repository installs — also works, as does an IP if the print server runs on another machine.) The host and port can be changed later via the integration's ⋮ → **Reconfigure**.
 
 The integration verifies the add-on is reachable and creates the device. The printer itself does **not** need to be on for setup — its state shows up on the Online sensor.
 
@@ -241,6 +236,12 @@ Tape-size mismatch between renderer and printer. With `auto_tape_width: true` (d
 **Text is clipped top/bottom**
 Shouldn't happen with auto-fit; if it does, lower the Font size entity (or set `0` for full auto).
 
+## Updating
+
+**Add-on** (repository install): updates are push-driven. When a new version is published (the `version:` in `label_printer/config.yaml` changes), the Add-on Store shows an **Update** button — force a check via Add-on Store → ⋮ → **Check for updates**. The update rebuilds the add-on in place; your options are preserved. Local-copy installs: re-copy the folder, then Check for updates.
+
+**Integration**: Home Assistant does not pull custom integrations from git. Either install it via [HACS](https://hacs.xyz) (HACS → Custom repositories → this repo's URL, type *Integration*) to get one-click updates when a new version is tagged, or re-copy `custom_components/label_printer/` and restart HA. Config entries, entity settings, and your customized sentence file survive updates.
+
 ## Development
 
 The add-on is a single-file Go HTTP server (`label_printer/main.go`) built directly against the ptouchgo library — the Dockerfile compiles it during add-on installation, no toolchain needed on your machine. The integration is standard HA custom-component Python; sentence patterns live in `custom_components/label_printer/sentences/en.yaml` and can be validated offline with [hassil](https://github.com/OHF-Voice/hassil).
@@ -249,7 +250,7 @@ Print pipeline: render text → `image.Gray` (auto-fit per line) → `ptouchgo.L
 
 ## Versioning
 
-This project follows [Semantic Versioning](https://semver.org/). See [CHANGELOG.md](CHANGELOG.md) for release history. The add-on and integration are released in lockstep.
+This project follows [Semantic Versioning](https://semver.org/). See [CHANGELOG.md](CHANGELOG.md) for release history. Add-on and integration versions may advance independently; the changelog labels each change.
 
 ## Compatibility
 

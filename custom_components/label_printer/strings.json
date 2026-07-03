@@ -3,7 +3,15 @@
     "step": {
       "user": {
         "title": "Connect to Label Printer",
-        "description": "Enter the host and port where the label-printer add-on is running. The add-on must be started before you can add this integration.",
+        "description": "Enter where the label-printer add-on is running. The default 'localhost' works for any add-on install method (the add-on publishes port 8765 on the host). Alternatively, use the add-on's internal hostname shown on its info page, or an IP if the print server runs on another machine.",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        }
+      },
+      "reconfigure": {
+        "title": "Update add-on connection",
+        "description": "Update the add-on connection. 'localhost' works for any add-on install method; the add-on's internal hostname (from its info page) or an external IP also work.",
         "data": {
           "host": "Host",
           "port": "Port"
@@ -14,7 +22,8 @@
       "cannot_connect": "Cannot reach the label-printer add-on. Make sure it is installed and running, then try again."
     },
     "abort": {
-      "already_configured": "This label printer is already configured."
+      "already_configured": "This label printer is already configured.",
+      "reconfigure_successful": "Connection settings updated."
     }
   },
   "options": {
@@ -29,34 +38,74 @@
   },
   "entity": {
     "sensor": {
-      "tape_width": { "name": "Tape width" },
-      "tape_color": { "name": "Tape color" },
-      "font_color": { "name": "Text color" },
-      "media_type": { "name": "Media type" },
-      "battery": { "name": "Battery" },
-      "model": { "name": "Model" },
-      "error": { "name": "Error" },
-      "phase": { "name": "Phase" },
-      "status_type": { "name": "Status" }
+      "tape_width": {
+        "name": "Tape width"
+      },
+      "tape_color": {
+        "name": "Tape color"
+      },
+      "font_color": {
+        "name": "Text color"
+      },
+      "media_type": {
+        "name": "Media type"
+      },
+      "battery": {
+        "name": "Battery"
+      },
+      "model": {
+        "name": "Model"
+      },
+      "error": {
+        "name": "Error"
+      },
+      "phase": {
+        "name": "Phase"
+      },
+      "status_type": {
+        "name": "Status"
+      }
     },
     "binary_sensor": {
-      "online": { "name": "Online" },
-      "problem": { "name": "Problem" }
+      "online": {
+        "name": "Online"
+      },
+      "problem": {
+        "name": "Problem"
+      }
     },
     "number": {
-      "font_size": { "name": "Font size (0 = auto)" },
-      "feed_amount": { "name": "Feed amount" }
+      "font_size": {
+        "name": "Font size (0 = auto)"
+      },
+      "feed_amount": {
+        "name": "Feed amount"
+      }
     },
     "switch": {
-      "autocut": { "name": "Auto cut" },
-      "mirror": { "name": "Mirror" },
-      "half_cut": { "name": "Half cut" },
-      "chain_print": { "name": "Chain printing" },
-      "high_dpi": { "name": "High DPI" }
+      "autocut": {
+        "name": "Auto cut"
+      },
+      "mirror": {
+        "name": "Mirror"
+      },
+      "half_cut": {
+        "name": "Half cut"
+      },
+      "chain_print": {
+        "name": "Chain printing"
+      },
+      "high_dpi": {
+        "name": "High DPI"
+      }
     },
     "button": {
-      "feed": { "name": "Feed and cut" },
-      "test_print": { "name": "Test print" }
+      "feed": {
+        "name": "Feed and cut"
+      },
+      "test_print": {
+        "name": "Test print"
+      }
     }
   }
 }
