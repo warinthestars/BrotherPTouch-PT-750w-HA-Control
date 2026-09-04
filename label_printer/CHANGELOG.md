@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.3
+
+- **Fixed:** dates/times on labels were rendered in UTC — a label printed at 10:30 PM Eastern carried tomorrow's date. Supervisor already passes the host timezone as `TZ`, but the plain-Alpine image had no tz database to resolve it; the IANA tz database is now embedded in the binary (`time/tzdata`)
+- `/config` now reports the active `timezone`
+
 ## 1.1.2
 
 - Default `printer_ip` changed to the neutral example `192.168.1.100`

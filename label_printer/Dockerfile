@@ -25,7 +25,7 @@ FROM alpine:latest
 LABEL \
     io.hass.name="Label Printer" \
     io.hass.description="Print labels on Brother PT-P750W" \
-    io.hass.version="1.1.2" \
+    io.hass.version="1.1.3" \
     io.hass.type="addon" \
     io.hass.arch="aarch64|amd64|armhf|armv7|i386"
 

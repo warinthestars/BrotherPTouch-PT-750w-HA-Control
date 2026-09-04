@@ -14,6 +14,10 @@ import (
 	"strings"
 	"sync"
 	"time"
+	_ "time/tzdata" // embed IANA tz db: Supervisor sets TZ=<host tz> in every
+	// add-on container, but the plain-Alpine image has no tzdata package, so Go
+	// silently fell back to UTC — labels printed late evening carried tomorrow's
+	// date.
 
 	"github.com/golang/freetype/truetype"
 	"github.com/ka2n/ptouchgo"
@@ -22,7 +26,7 @@ import (
 	"golang.org/x/image/math/fixed"
 )
 
-const version = "1.1.2"
+const version = "1.1.3"
 
 // ---------------------------------------------------------------------------
 // Config (from environment, set by run.sh from add-on options)
@@ -712,6 +716,7 @@ func handleConfig(w http.ResponseWriter, r *http.Request) {
 		"time_format":     timeFormat,
 		"auto_tape_width": autoTapeWidth,
 		"log_level":       logLevel,
+		"timezone":        os.Getenv("TZ"),
 	})
 }
 
@@ -735,8 +740,9 @@ func logRequests(next http.Handler) http.Handler {
 }
 
 func main() {
-	log.Printf("label-printer %s starting: listen=%s printer=%s tape=%dmm font=%.0fpt auto_tape=%v log=%s",
-		version, listenAddr, printerAddr, tapeWidthMM, fontSize, autoTapeWidth, logLevel)
+	tzName, _ := time.Now().Zone()
+	log.Printf("label-printer %s starting: listen=%s printer=%s tape=%dmm font=%.0fpt auto_tape=%v log=%s tz=%s (%s)",
+		version, listenAddr, printerAddr, tapeWidthMM, fontSize, autoTapeWidth, logLevel, os.Getenv("TZ"), tzName)
 
 	http.HandleFunc("/print", handlePrint)
 	http.HandleFunc("/status", handleStatus)

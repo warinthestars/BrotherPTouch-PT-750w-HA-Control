@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The add-on (`label_printer/`) and the integration (`custom_components/label_printer/`)
 are versioned together; component-specific notes are labeled **Add-on** or **Integration**.
 
+## [1.2.1] - 2026-09-04
+
+### Fixed
+- **Add-on:** label dates and times were rendered in UTC — a label printed at
+  10:30 PM Eastern carried tomorrow's date. Supervisor passes the host
+  timezone to every add-on container as `TZ`, but the plain-Alpine runtime
+  image has no tzdata package, so Go silently fell back to UTC. The IANA tz
+  database is now embedded in the Go binary (`time/tzdata`). `/config` now
+  reports the active `timezone`. Requires rebuilding/updating the add-on
+  to 1.1.3.
+
 ## [1.2.0] - 2026-07-03
 
 ### Added
