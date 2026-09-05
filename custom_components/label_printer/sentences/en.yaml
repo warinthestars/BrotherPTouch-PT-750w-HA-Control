@@ -19,55 +19,55 @@ intents:
     data:
       # ── plain text ────────────────────────────────────────────────────
       - sentences:
-          - "print a label (that says|saying|with the text) {text}"
-          - "print {text} on a label"
-          - "make a label (that says|saying|with the text) {text}"
+          - "print (a|the) label (that says|saying|with the text) {text}"
+          - "print {text} on (a|the) label"
+          - "make (a|the) label (that says|saying|with the text) {text}"
           - "label {text}"
 
       # ── with today's date (date phrase first — most reliable) ────────
       - sentences:
-          - "(print|make) a label with (today's date|the date) (that says|saying) {text}"
-          - "(print|make) a dated label (that says|saying) {text}"
+          - "(print|make) (a|the) label with (today's date|the date) (that says|saying) {text}"
+          - "(print|make) (a|the) dated label (that says|saying) {text}"
         slots:
           with_date: true
 
       # ── with today's date (date phrase last — best effort; the {text}
       #    wildcard can occasionally swallow the trailing phrase) ────────
       - sentences:
-          - "(print|make) a label (that says|saying) {text} with (today's date|the date)"
-          - "(print|make) a label (that says|saying) {text} and (today's date|the date)"
+          - "(print|make) (a|the) label (that says|saying) {text} with (today's date|the date)"
+          - "(print|make) (a|the) label (that says|saying) {text} and (today's date|the date)"
         slots:
           with_date: true
 
       # ── with date and time ────────────────────────────────────────────
       - sentences:
-          - "(print|make) a label with the (date and time|time and date) (that says|saying) {text}"
-          - "(print|make) a label (that says|saying) {text} with the (date and time|time and date)"
+          - "(print|make) (a|the) label with the (date and time|time and date) (that says|saying) {text}"
+          - "(print|make) (a|the) label (that says|saying) {text} with the (date and time|time and date)"
         slots:
           with_date: true
           with_time: true
 
       # ── with time only ────────────────────────────────────────────────
       - sentences:
-          - "(print|make) a label with the time (that says|saying) {text}"
+          - "(print|make) (a|the) label with the time (that says|saying) {text}"
         slots:
           with_time: true
 
       # ── expiry: N days from now ───────────────────────────────────────
       - sentences:
-          - "(print|make) a label (that says|saying) {text} (expiring|that expires|good for) in {count} (days|day)"
-          - "(print|make) a label (that says|saying) {text} (expiring|that expires) {count} (days|day) from (now|today)"
+          - "(print|make) (a|the) label (that says|saying) {text} (expiring|that expires|good for) in {count} (days|day)"
+          - "(print|make) (a|the) label (that says|saying) {text} (expiring|that expires) {count} (days|day) from (now|today)"
         slots:
           offset_unit: "days"
 
       # ── expiry: N weeks from now ──────────────────────────────────────
       - sentences:
-          - "(print|make) a label (that says|saying) {text} (expiring|that expires|good for) in {count} (weeks|week)"
-          - "(print|make) a label (that says|saying) {text} (expiring|that expires) {count} (weeks|week) from (now|today)"
+          - "(print|make) (a|the) label (that says|saying) {text} (expiring|that expires|good for) in {count} (weeks|week)"
+          - "(print|make) (a|the) label (that says|saying) {text} (expiring|that expires) {count} (weeks|week) from (now|today)"
         slots:
           offset_unit: "weeks"
 
       # ── multiple copies ───────────────────────────────────────────────
       - sentences:
           - "print {copies} labels (that say|saying) {text}"
-          - "print {copies} copies of a label (that says|saying) {text}"
+          - "print {copies} copies of (a|the) label (that says|saying) {text}"
