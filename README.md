@@ -123,8 +123,9 @@ Speak into any Assist entry point: the HA companion app mic, the Assist dialog, 
 | "print a label saying yogurt expiring in 5 days" | `Yogurt` over `Jul 6, 2026` |
 | "print a label saying stew good for in 2 weeks" | `Stew` over `Jul 15, 2026` |
 | "print 3 labels saying spice jar" | three cut copies |
+| "print 2 labels with the date" | two cut labels showing just today's date |
 
-Accepted variations: "make a label…", "label spices", "that says / saying / with the text", "dated", "expires N days from now". Phrasings with the modifier *before* the text ("…with today's date saying X") parse most reliably.
+Accepted variations: "make a label…", "label spices", "that says / saying / with the text / for", "dated", "expires N days from now", "good for N weeks", filler like "can you… please", number words ("two labels"), and common mishearings ("print a level…", "print to labels…"). A date phrase the text wildcard swallows ("…saying soup with the date") is still applied as the date rather than printed. Phrasings with the modifier *before* the text ("…with today's date saying X") parse most reliably.
 
 ## Entities
 

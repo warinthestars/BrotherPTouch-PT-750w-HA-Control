@@ -2,7 +2,32 @@
 # config/custom_sentences/en/label_printer.yaml by the label_printer
 # integration. Edits here are overwritten on update; to customize, remove
 # this first line and the integration will leave the installed copy alone.
+#
+# Fuzzy matching: Assist only matches sentences literally, so tolerance is
+# built in two layers. (1) The expansion rules below accept common filler
+# words, optional articles, synonyms and frequent speech-to-text mishearings
+# ("level", "table", "lable" for "label"; "to"/"too" for "two"). (2) The
+# PrintLabel intent handler normalizes the captured {text}: it strips
+# trailing punctuation/"please", and if the wildcard swallowed a trailing
+# "…with today's date" / "…and the time" it moves that into the date/time
+# options instead of printing it.
 language: "en"
+
+expansion_rules:
+  # lead-in filler people say (and STT keeps) before the command
+  lead: "[hey] [please] [(can|could|would|will) you] [please] [go ahead and]"
+  print: "(print|print out|make|make me|create|do|give me|get me|i need|i want|i'd like)"
+  a: "[a|an|the|one|me a|me the|us a]"
+  label: "(label|labels|lable|lables|level|levels|table|tables|label's|labeled)"
+  says: "(that says|that say|which says|which say|saying|says|that reads|that read|reading|with the text|with the words|with the word|that said|for)"
+  date: "[today's|todays|today|the|the current|current|today's current] date"
+  datetime: "[the] (date and time|time and date|date and the time|time and the date|date time)"
+  time: "[the] [current] time"
+  with: "(with|and|plus|showing|including)"
+  dated: "(dated|date|date stamped|datestamped)"
+  end: "[on it] [please] [thanks|thank you]"
+  copiesof: "[copies of|copies]"
+
 lists:
   text:
     wildcard: true
@@ -12,62 +37,110 @@ lists:
       to: 90
   copies:
     range:
-      from: 2
+      from: 1
       to: 20
+  # frequent STT mishearings / phrasings for a copy count
+  copies_alias:
+    values:
+      - in: "to"
+        out: 2
+      - in: "too"
+        out: 2
+      - in: "a couple"
+        out: 2
+      - in: "a couple of"
+        out: 2
+      - in: "a pair of"
+        out: 2
+
 intents:
   PrintLabel:
     data:
       # ── plain text ────────────────────────────────────────────────────
       - sentences:
-          - "print (a|the) label (that says|saying|with the text) {text}"
-          - "print {text} on (a|the) label"
-          - "make (a|the) label (that says|saying|with the text) {text}"
+          - "<lead> <print> <a> <label> <says> {text} <end>"
+          - "<lead> <print> {text} on <a> <label> <end>"
           - "label {text}"
 
-      # ── with today's date (date phrase first — most reliable) ────────
+      # ── text + today's date (date phrase first — most reliable) ──────
       - sentences:
-          - "(print|make) (a|the) label with (today's date|the date) (that says|saying) {text}"
-          - "(print|make) (a|the) dated label (that says|saying) {text}"
+          - "<lead> <print> <a> <label> <with> <date> [and] <says> {text} <end>"
+          - "<lead> <print> <a> <dated> <label> <says> {text} <end>"
         slots:
           with_date: true
 
-      # ── with today's date (date phrase last — best effort; the {text}
-      #    wildcard can occasionally swallow the trailing phrase) ────────
+      # ── text + today's date (date phrase last — best effort; the
+      #    handler also rescues it if the wildcard swallows the phrase) ─
       - sentences:
-          - "(print|make) (a|the) label (that says|saying) {text} with (today's date|the date)"
-          - "(print|make) (a|the) label (that says|saying) {text} and (today's date|the date)"
+          - "<lead> <print> <a> <label> <says> {text} <with> <date> <end>"
         slots:
           with_date: true
 
-      # ── with date and time ────────────────────────────────────────────
+      # ── date-only label: "print a label with the date" ────────────────
       - sentences:
-          - "(print|make) (a|the) label with the (date and time|time and date) (that says|saying) {text}"
-          - "(print|make) (a|the) label (that says|saying) {text} with the (date and time|time and date)"
+          - "<lead> <print> <a> <label> <with> <date> <end>"
+          - "<lead> <print> <a> <dated> <label> <end>"
+          - "<lead> <print> <date> [on <a> <label>] <end>"
+          - "<lead> <print> <a> <label> of <date> <end>"
+        slots:
+          with_date: true
+
+      # ── N date-only labels: "print 2 labels with the date" ────────────
+      - sentences:
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [<copiesof>] [<a>] <label> <with> <date> <end>"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) <dated> <label> <end>"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [<copiesof>] [of] <date> [<label>] <end>"
+          - "<lead> <print> <date> on ({copies}|{copies_alias:copies}) <label> <end>"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [copies of] <a> <dated> <label> <end>"
+        slots:
+          with_date: true
+
+      # ── N labels with text + date ─────────────────────────────────────
+      - sentences:
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [<copiesof>] [<a>] <label> <with> <date> [and] <says> {text} <end>"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) <dated> <label> <says> {text} <end>"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [<copiesof>] [<a>] <label> <says> {text} <with> <date> <end>"
+        slots:
+          with_date: true
+
+      # ── date and time (text optional, copies optional) ────────────────
+      - sentences:
+          - "<lead> <print> <a> <label> <with> <datetime> [and] <says> {text} <end>"
+          - "<lead> <print> <a> <label> <says> {text} <with> <datetime> <end>"
+          - "<lead> <print> <a> <label> <with> <datetime> <end>"
+          - "<lead> <print> <datetime> [on <a> <label>] <end>"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [<copiesof>] [<a>] <label> <with> <datetime> [[and] <says> {text}] <end>"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [<copiesof>] [<a>] <label> <says> {text} <with> <datetime> <end>"
         slots:
           with_date: true
           with_time: true
 
-      # ── with time only ────────────────────────────────────────────────
+      # ── time only ─────────────────────────────────────────────────────
       - sentences:
-          - "(print|make) (a|the) label with the time (that says|saying) {text}"
+          - "<lead> <print> <a> <label> with <time> [and] <says> {text} <end>"
+          - "<lead> <print> <a> <label> with <time> <end>"
         slots:
           with_time: true
 
       # ── expiry: N days from now ───────────────────────────────────────
       - sentences:
-          - "(print|make) (a|the) label (that says|saying) {text} (expiring|that expires|good for) in {count} (days|day)"
-          - "(print|make) (a|the) label (that says|saying) {text} (expiring|that expires) {count} (days|day) from (now|today)"
+          - "<lead> <print> <a> <label> <says> {text} (expiring|that expires|expires|good for|use by|best by) in {count} (days|day) <end>"
+          - "<lead> <print> <a> <label> <says> {text} (expiring|that expires|expires) {count} (days|day) from (now|today) <end>"
+          - "<lead> <print> <a> <label> <says> {text} (good for|use within|keeps for|lasts) {count} (days|day) <end>"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [<copiesof>] [<a>] <label> <says> {text} (expiring|that expire|that expires|expires|good for) in {count} (days|day) <end>"
         slots:
           offset_unit: "days"
 
       # ── expiry: N weeks from now ──────────────────────────────────────
       - sentences:
-          - "(print|make) (a|the) label (that says|saying) {text} (expiring|that expires|good for) in {count} (weeks|week)"
-          - "(print|make) (a|the) label (that says|saying) {text} (expiring|that expires) {count} (weeks|week) from (now|today)"
+          - "<lead> <print> <a> <label> <says> {text} (expiring|that expires|expires|good for|use by|best by) in {count} (weeks|week) <end>"
+          - "<lead> <print> <a> <label> <says> {text} (expiring|that expires|expires) {count} (weeks|week) from (now|today) <end>"
+          - "<lead> <print> <a> <label> <says> {text} (good for|use within|keeps for|lasts) {count} (weeks|week) <end>"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [<copiesof>] [<a>] <label> <says> {text} (expiring|that expire|that expires|expires|good for) in {count} (weeks|week) <end>"
         slots:
           offset_unit: "weeks"
 
-      # ── multiple copies ───────────────────────────────────────────────
+      # ── multiple copies, plain text ───────────────────────────────────
       - sentences:
-          - "print {copies} labels (that say|saying) {text}"
-          - "print {copies} copies of (a|the) label (that says|saying) {text}"
+          - "<lead> <print> ({copies}|{copies_alias:copies}) [<copiesof>] [<a>] <label> <says> {text} <end>"
+          - "<lead> <print> {text} on ({copies}|{copies_alias:copies}) <label> <end>"

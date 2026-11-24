@@ -28,7 +28,7 @@ Everything except `text` is optional; omitted fields use the options above.
 
 ```jsonc
 {
-  "text": "Breakfast Potatoes",                     // line 1 (required)
+  "text": "Breakfast Potatoes",                     // line 1 (optional if date/time/line2 set)
   "date": { "offset_days": 0, "offset_weeks": 0 },  // add a date line; offsets for expiry dates
   "time": true,                                     // append the current time to the date line
   "line2": "raw text",                              // explicit line 2 (overrides date/time)

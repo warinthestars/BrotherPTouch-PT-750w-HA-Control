@@ -526,16 +526,16 @@ func handlePrint(w http.ResponseWriter, r *http.Request) {
 		writeError(w, http.StatusBadRequest, "invalid JSON: "+err.Error())
 		return
 	}
-	if req.Text == "" {
-		writeError(w, http.StatusBadRequest, "text field is required")
-		return
-	}
 	if req.Copies > 20 {
 		writeError(w, http.StatusBadRequest, "copies must be 20 or fewer")
 		return
 	}
 
 	line2 := composeLine2(&req, time.Now())
+	if req.Text == "" && line2 == "" {
+		writeError(w, http.StatusBadRequest, "text is required unless date, time or line2 is set")
+		return
+	}
 	opts := req.toJobOptions()
 
 	tapeMM := tapeWidthMM
@@ -548,9 +548,16 @@ func handlePrint(w http.ResponseWriter, r *http.Request) {
 		maxPt = req.FontSize
 	}
 
-	lines := []lineSpec{{text: req.Text, maxPt: maxPt}}
-	if line2 != "" {
-		lines = append(lines, lineSpec{text: line2, maxPt: maxPt})
+	// Text-less request (e.g. "print 2 labels with the date"): the date/time
+	// becomes the only line and gets the full tape height.
+	var lines []lineSpec
+	if req.Text == "" {
+		lines = []lineSpec{{text: line2, maxPt: maxPt}}
+	} else {
+		lines = []lineSpec{{text: req.Text, maxPt: maxPt}}
+		if line2 != "" {
+			lines = append(lines, lineSpec{text: line2, maxPt: maxPt})
+		}
 	}
 
 	log.Printf("print request: %q line2=%q copies=%d tape=%dmm", req.Text, line2, opts.copies, tapeMM)

@@ -7,6 +7,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 The add-on (`label_printer/`) and the integration (`custom_components/label_printer/`)
 are versioned together; component-specific notes are labeled **Add-on** or **Integration**.
 
+## [1.3.0] - 2026-11-24
+
+### Added
+- **Integration:** date-only voice labels — "print 2 labels with the date",
+  "print two dated labels", "print the date on 3 labels", "print today's
+  date", plus combinations with text ("print 2 labels with the date that
+  say leftovers") and date-and-time. Copy counts accept number words and
+  common mishearings ("print to labels…", "a couple of labels").
+- **Add-on (1.2.0):** `text` is optional when `date`/`time`/`line2` is set;
+  the date/time then prints as a single full-height line.
+
+### Changed
+- **Integration:** fuzzier voice matching. The sentence file now accepts
+  filler and politeness words ("can you…", "please", "on it"), optional
+  articles, more verbs ("make me", "create", "give me", "I need"), more
+  connectors ("for", "reading", "with the words"), and frequent
+  speech-to-text mishearings of "label" ("level", "table", "lable").
+- **Integration:** dictated text is cleaned before printing — trailing
+  punctuation, quotes and "please" are stripped, and a date/time phrase
+  swallowed by the text wildcard ("…soup with today's date") is converted
+  into the date option instead of being printed.
+- **Integration:** an add-on that rejects a request now gets a specific
+  spoken error instead of "could not reach the printer".
+
 ## [1.2.1] - 2026-09-04
 
 ### Fixed

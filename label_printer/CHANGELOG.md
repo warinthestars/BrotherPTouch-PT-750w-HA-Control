@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+- **Added:** `text` is now optional when `date`, `time` or `line2` is set — a text-less request prints the date/time alone as a single full-height line (used by the integration's "print 2 labels with the date" voice command)
+
 ## 1.1.3
 
 - **Fixed:** dates/times on labels were rendered in UTC — a label printed at 10:30 PM Eastern carried tomorrow's date. Supervisor already passes the host timezone as `TZ`, but the plain-Alpine image had no tz database to resolve it; the IANA tz database is now embedded in the binary (`time/tzdata`)
